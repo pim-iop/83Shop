@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-th="ร้านแปดสิบสาม - ช็อปในฝันของคุณ" data-en="83 Shop - Shop of Your Dreams">ร้านแปดสิบสาม - ช็อปในฝันของคุณ</title>
+    <style>
+        @font-face {
+            font-family: 'Satoshi-Regular';
+            src: url('{{ url_for("static", filename="fonts/Satoshi-Regular.ttf") }}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Thai';
+            src: url('{{ url_for("static", filename="fonts/ไทย.ttf") }}') format('truetype');
+        }
+        body {
+            font-family: 'Thai', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .lang-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .lang-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .lang-buttons button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .lang-buttons button.active {
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        .welcome {
+            text-align: center;
+            margin-top: 80px;
+            font-size: 2.5em;
+            color: #333;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .support {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .product-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+        .product-image {
+            flex: 1;
+            text-align: center;
+        }
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .product-info {
+            flex: 1;
+            padding-left: 30px;
+        }
+        .product-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .buy-button {
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+            margin-bottom: 20px;
+        }
+        .buy-button:hover {
+            background: linear-gradient(135deg, #e55a2b, #d14d25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,53,0.4);
+        }
+        .price {
+            font-size: 1.5em;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        .reviews {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .reviews h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .reviews img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-buttons">
+        <button id="th-btn" class="active" onclick="setLanguage('th')">ไทย</button>
+        <button id="en-btn" onclick="setLanguage('en')">Eng</button>
+    </div>
+    <h1 class="welcome" data-th="ยินดีต้อนรับสู่ร้านแปดสิบสาม" data-en="Welcome to 83 Shop">ยินดีต้อนรับสู่ร้านแปดสิบสาม</h1>
+    <p class="support" data-th="สนับสนุนโดยซอยขนม" data-en="Supported by Soi Khanom">สนับสนุนโดยซอยขนม</p>
+    <div class="product-container">
+        <div class="product-image">
+            <img src="{{ url_for('static', filename='FoiThong.png') }}" alt="FoiThong">
+        </div>
+        <div class="product-info">
+            <h1 class="product-title" data-th="ฝอยทอง" data-en="FoiThong">ฝอยทอง</h1>
+            <button class="buy-button" onclick="Buy()" data-th="ซื้อเลย" data-en="Buy Now">ซื้อเลย</button>
+            <button onclick="scanqrfoithong()">สแกนคิวอาร์โค้ด (TrueMoney)</button>
+            <div class="price" data-th="฿75" data-en="$75">฿75</div>
+        </div>
+    </div>
+    <div class="reviews">
+        <button class="buy-button" onclick="window.open('https://www.google.com/search?q=83+SukSawat&sca_esv=7de3a465e3048b53&rlz=1C1_____enTH1208TH1208&biw=1232&bih=678&sxsrf=ANbL-n5BnIT6crmFaASwHIkhqQR5dPDa3g%3A1775277669314&ei=ZZbQaYfpEvHn1e8PxZmBiQ4&ved=0ahUKEwjHr-3WsNOTAxXxc_UHHcVMIOEQ4dUDCBE&uact=5&oq=83+SukSawat&gs_lp=Egxnd3Mtd2l6LXNlcnAiCzgzIFN1a1Nhd2F0MgIQJjICECYyAhAmMgIQJjICECYyCBAAGIAEGKIEMgUQABjvBTIIEAAYgAQYogQyCBAAGKIEGIkFSOYNUMIFWMIFcAF4AJABAJgBgAGgAYABqgEDMC4xuAEDyAEA-AEBmAICoAKfAcICCBAAGLADGO8FwgILEAAYgAQYsAMYogSYAwCIBgGQBgWSBwMxLjGgB-gGsgcDMC4xuAeSAcIHAzMtMsgHGIAIAA&sclient=gws-wiz-serp','_blank' )" data-th="รีวิวเราบน Google" data-en="Review Us on Google">Review Us on Google</button>
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelector('title').textContent = document.querySelector('title').getAttribute('data-' + lang);
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.body.style.fontFamily = lang === 'en' ? "'Satoshi-Regular', sans-serif" : "'Thai', sans-serif";
+            document.querySelectorAll('.lang-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(lang + '-btn').classList.add('active');
+        }
+        function Buy() {
+            window.location.href = "/buy";
+        }
+        function scanqrfoithong() {
+            window.location.href = "/FoiThong";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foi Thong</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div>
+        <p>FoiThong - 75THB</p>
+        <div id="qr75"></div>
+        <h1>OR</h1>
+        <a href="https://buy.stripe.com/test_4gMeVf3xS5OgdyB91U24000" target="_blank">Go To This Link</a>
+    </div>
+</body>
+<script>
+const PHONE = "0812345678";
+
+function formatPhone(phone) {
+  if (phone.startsWith("0")) {
+    return "66" + phone.substring(1);
+  }
+  return phone;
+}
+
+function crc16(s) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < s.length; i++) {
+    crc ^= s.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((crc & 0x8000) !== 0) {
+        crc = (crc << 1) ^ 0x1021;
+      } else {
+        crc = crc << 1;
+      }
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function generatePayload(phone, amount) {
+  phone = formatPhone(phone);
+
+  let payload = "";
+  payload += "000201";
+  payload += "010211";
+
+  payload += "2937";
+  payload += "0016A000000677010111";
+  payload += "0113" + phone;
+
+  payload += "5802TH";
+  payload += "5303764";
+
+  let amountStr = amount.toFixed(2);
+  payload += "54" + amountStr.length.toString().padStart(2, "0") + amountStr;
+
+  payload += "6304";
+  payload += crc16(payload);
+
+  return payload;
+}
+
+function createQR(id, amount) {
+  let payload = generatePayload(PHONE, amount);
+
+  new QRCode(document.getElementById(id), {
+    text: payload,
+    width: 200,
+    height: 200
+  });
+}
+
+// Generate QRs
+createQR("qr75", 75);
+</script>
+</html>

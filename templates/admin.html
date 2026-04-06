@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-th="แผงควบคุมผู้ดูแลระบบ - ร้าน 83" data-en="Admin Control Panel - 83 Shop">Admin Control Panel - 83 Shop</title>
+    <style>
+        @font-face {
+            font-family: 'Satoshi-Regular';
+            src: url('{{ url_for("static", filename="fonts/Satoshi-Regular.ttf") }}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Thai';
+            src: url('{{ url_for("static", filename="fonts/ไทย.ttf") }}') format('truetype');
+        }
+        body {
+            font-family: 'Satoshi-Regular', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .lang-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .lang-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .lang-buttons button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .lang-buttons button.active {
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        a {
+            text-decoration: none;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        button:hover {
+            background: linear-gradient(135deg, #e55a2b, #d14d25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,53,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-buttons">
+        <button id="th-btn" onclick="setLanguage('th')">ไทย</button>
+        <button id="en-btn" class="active" onclick="setLanguage('en')">Eng</button>
+    </div>
+    <div class="container">
+        <h1 data-th="แผงควบคุมผู้ดูแลระบบ" data-en="Admin Control Panel">Admin Control Panel</h1>
+        <a href="admin_food.html">
+            <button data-th="จัดการรายการอาหาร" data-en="Manage Food Items">Manage Food Items</button>
+        </a>
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelector('title').textContent = document.querySelector('title').getAttribute('data-' + lang);
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.body.style.fontFamily = lang === 'en' ? "'Satoshi-Regular', sans-serif" : "'Thai', sans-serif";
+            document.querySelectorAll('.lang-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(lang + '-btn').classList.add('active');
+        }
+    </script>
+</body>
+</html>

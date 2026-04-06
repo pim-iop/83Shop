@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-th="ผู้ดูแลระบบอาหาร" data-en="Admin Food">Admin Food</title>
+    <style>
+        @font-face {
+            font-family: 'Satoshi-Regular';
+            src: url('{{ url_for("static", filename="fonts/Satoshi-Regular.ttf") }}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Thai';
+            src: url('{{ url_for("static", filename="fonts/ไทย.ttf") }}') format('truetype');
+        }
+        body {
+            font-family: 'Satoshi-Regular', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .lang-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .lang-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .lang-buttons button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .lang-buttons button.active {
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 80px auto 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .order {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ff6b35;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .order.completed {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .order-content {
+            flex: 1;
+        }
+        .order b {
+            color: #ff6b35;
+        }
+        .completed-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+        }
+        .completed-btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76,175,80,0.4);
+        }
+        .completed-icon {
+            color: #4CAF50;
+            font-size: 1.5em;
+            margin-left: 10px;
+        }
+        .no-orders {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-buttons">
+        <button id="th-btn" onclick="setLanguage('th')">ไทย</button>
+        <button id="en-btn" class="active" onclick="setLanguage('en')">Eng</button>
+    </div>
+    <div class="container">
+        <h1 data-th="📋 คำสั่งซื้อ" data-en="📋 Orders">📋 Orders</h1>
+        {% if data %}
+            {% for order_id, room, message, status in data %}
+                <div class="order {% if status == '1' %}completed{% endif %}">
+                    <div class="order-content">
+                        <p><b data-th="ห้อง" data-en="Room">Room</b> {{ room }}: {{ message }}</p>
+                    </div>
+                    {% if status == '0' %}
+                        <form method="POST" action="{{ url_for('complete_order', order_id=order_id) }}" style="margin: 0;">
+                            <button type="submit" class="completed-btn" data-th="เสร็จสิ้น" data-en="Completed">Completed</button>
+                        </form>
+                    {% else %}
+                        <span class="completed-icon">✅</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-orders" data-th="ไม่มีคำสั่งซื้อ" data-en="No orders yet">No orders yet</p>
+        {% endif %}
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelector('title').textContent = document.querySelector('title').getAttribute('data-' + lang);
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.body.style.fontFamily = lang === 'en' ? "'Satoshi-Regular', sans-serif" : "'Thai', sans-serif";
+            document.querySelectorAll('.lang-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(lang + '-btn').classList.add('active');
+        }
+    </script>
+</body>
+</html>
